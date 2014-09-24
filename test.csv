@@ -1,0 +1,4 @@
+Source,Target,Weight,acategory
+a1,a2,1,green
+a2,b2,1,red
+a1,b2,1,red

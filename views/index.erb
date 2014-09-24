@@ -1,0 +1,212 @@
+<html>
+<head>
+    <style>
+    body {
+      color: #333;
+      font-size: 14px;
+      font-family: Lato, sans-serif;
+    }
+    #graph-container {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+    }
+    #control-pane {
+      top: 10px;
+      /*bottom: 10px;*/
+      right: 10px;
+      position: absolute;
+      width: 330px;
+      background-color: rgb(249, 247, 237);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    #control-pane > div {
+      margin: 10px;
+      overflow-x: auto;
+    }
+    .line {
+      clear: both;
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 12px 0 0 0;
+      border-bottom: 1px solid #aac789;
+      background: transparent;
+    }
+    h2, h3, h4 {
+      padding: 0;
+      font-variant: small-caps;
+    }
+    .green {
+      color: #437356;
+    }
+    h2.underline {
+      color: #437356;
+      background: #f4f0e4;
+      margin: 0;
+      border-radius: 2px;
+      padding: 8px 12px;
+      font-weight: 700;
+    }
+    .hidden {
+      display: none;
+      visibility: hidden;
+    }
+
+    input[type=range] {
+      width: 160px;
+    }
+  </style>
+</head>
+<body>
+<script src="sigma.min.js"></script>
+<script src="plugins/sigma.parsers.gexf.min.js"></script>
+<script src="plugins/sigma.plugins.dragNodes.min.js"></script>
+<script src="plugins/sigma.plugins.filter.min.js"></script>
+
+<div id="container">
+  <div id="graph-container"></div>
+  <div id="control-pane">
+    <h2 class="underline">Screenup 2014 - Besuchervisualisierung by IaKom</h2>
+    <div>
+      <h3>Besucher Kategorie</h3>
+      <select id="node-category">
+        <option value="" selected>Alle Kategorien</option>
+      </select>
+    </div>
+    <span class="line"></span>
+    <div>
+      <button id="reset-btn">Zurücksetzen</button>
+    </div>
+    <div id="dump" class="hidden"></div>
+  </div>
+</div>
+<script>
+/**
+ * This is an example on how to use sigma filters plugin on a real-world graph.
+ */
+var filter;
+
+/**
+ * DOM utility functions
+ */
+var _ = {
+  $: function (id) {
+    return document.getElementById(id);
+  },
+
+  all: function (selectors) {
+    return document.querySelectorAll(selectors);
+  },
+
+  removeClass: function(selectors, cssClass) {
+    var nodes = document.querySelectorAll(selectors);
+    var l = nodes.length;
+    for ( i = 0 ; i < l; i++ ) {
+      var el = nodes[i];
+      // Bootstrap compatibility
+      el.className = el.className.replace(cssClass, '');
+    }
+  },
+
+  addClass: function (selectors, cssClass) {
+    var nodes = document.querySelectorAll(selectors);
+    var l = nodes.length;
+    for ( i = 0 ; i < l; i++ ) {
+      var el = nodes[i];
+      // Bootstrap compatibility
+      if (-1 == el.className.indexOf(cssClass)) {
+        el.className += ' ' + cssClass;
+      }
+    }
+  },
+
+  show: function (selectors) {
+    this.removeClass(selectors, 'hidden');
+  },
+
+  hide: function (selectors) {
+    this.addClass(selectors, 'hidden');
+  },
+
+  toggle: function (selectors, cssClass) {
+    var cssClass = cssClass || "hidden";
+    var nodes = document.querySelectorAll(selectors);
+    var l = nodes.length;
+    for ( i = 0 ; i < l; i++ ) {
+      var el = nodes[i];
+      //el.style.display = (el.style.display != 'none' ? 'none' : '' );
+      // Bootstrap compatibility
+      if (-1 !== el.className.indexOf(cssClass)) {
+        el.className = el.className.replace(cssClass, '');
+      } else {
+        el.className += ' ' + cssClass;
+      }
+    }
+  }
+};
+
+
+function updatePane (graph, filter) {
+  // get max degree
+  var maxDegree = 0,
+      categories = {};
+  
+  // read nodes
+  graph.nodes().forEach(function(n) {
+    maxDegree = Math.max(maxDegree, graph.degree(n.id));
+    categories[n.attributes.acategory] = true;
+  })
+
+  // node category
+  var nodecategoryElt = _.$('node-category');
+  allowed_categories = ["Andere", "Kunde", "Agentur", "Print", "Broadcaster", "Intelligence", "Technik", "HR", "Verband", "Produktion", "Kino", "Werbevermarkter", "Radio", "Infrastruktur", "Forschung"]
+  Object.keys(categories).forEach(function(c) {
+    var optionElt = document.createElement("option"); 
+    optionElt.text = c;
+    nodecategoryElt.add(optionElt);
+  });
+
+  // reset button
+  _.$('reset-btn').addEventListener("click", function(e) {
+    _.$('min-degree').value = 0;
+    _.$('min-degree-val').textContent = '0';
+    _.$('node-category').selectedIndex = 0;
+    filter.undo().apply();
+    _.$('dump').textContent = '';
+    _.hide('#dump');
+  });
+
+}
+
+// Initialize sigma with the dataset.
+sigma.parsers.gexf('screenup3.gexf', {
+  container: 'graph-container',
+  settings: {
+    edgeColor: 'default',
+    defaultEdgeColor: '#ccc'
+  }
+}, function(s) {
+  // Initialize the Filter API
+  filter = new sigma.plugins.filter(s);
+
+  updatePane(s.graph, filter);
+
+  function applyCategoryFilter(e) {
+    var c = e.target[e.target.selectedIndex].value;
+    filter
+      .undo('node-category')
+      .nodesBy(function(n) {
+        return !c.length || n.attributes.acategory === c;
+      }, 'node-category')
+      .apply();
+  }
+
+  _.$('node-category').addEventListener("change", applyCategoryFilter);
+});
+
+</script>
+</body>
+</html>
