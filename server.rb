@@ -4,7 +4,7 @@ require "sinatra"
 require 'csv'
 require 'json'
 
-class Screenup < Sinatra::Base
+#class Screenup < Sinatra::Base
 
   get '/' do
     erb :index
@@ -31,5 +31,5 @@ class Screenup < Sinatra::Base
     @data = {"nodes" => nodes, "edges" => edges}.to_json#
   end
 
-end
+#end
 

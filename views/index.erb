@@ -171,8 +171,6 @@ function updatePane (graph, filter) {
 
   // reset button
   _.$('reset-btn').addEventListener("click", function(e) {
-    _.$('min-degree').value = 0;
-    _.$('min-degree-val').textContent = '0';
     _.$('node-category').selectedIndex = 0;
     filter.undo().apply();
     _.$('dump').textContent = '';
@@ -182,10 +180,12 @@ function updatePane (graph, filter) {
 }
 
 // Initialize sigma with the dataset.
-sigma.parsers.gexf('screenup3.gexf', {
+var s1 = sigma.parsers.gexf('screenup3.gexf', {
   container: 'graph-container',
   settings: {
     edgeColor: 'default',
+    zoomMin: 0.02,
+    zoomMax: 1,
     defaultEdgeColor: '#ccc'
   }
 }, function(s) {
@@ -202,9 +202,22 @@ sigma.parsers.gexf('screenup3.gexf', {
         return !c.length || n.attributes.acategory === c;
       }, 'node-category')
       .apply();
-  }
+  };
+
+  function resetZoom(e){
+    alert(e)
+    if(typeof sigma.camera == "undefined"){
+        camera = sigma.cameras[0];
+    }
+    camera.ratio = 1;
+    camera.x = 0;
+    camera.y = 0;   
+    this.refresh();
+  };
 
   _.$('node-category').addEventListener("change", applyCategoryFilter);
+  _.$('reset-btn').addEventListener("change", applyCategoryFilter);
+  
 });
 
 </script>

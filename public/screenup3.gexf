@@ -3870,9 +3870,9 @@
           <attvalue for="eigencentrality" value="0.0"></attvalue>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
-        <viz:size value="20.0"></viz:size>
+        <viz:size value="40.0"></viz:size>
         <viz:position x="4954.735" y="2288.2485"></viz:position>
-        <viz:color r="90" g="50" b="172"></viz:color>
+        <viz:color r="255" g="0" b="0"></viz:color>
       </node>
       <node id="Dürig  Mike" label="Dürig  Mike">
         <attvalues>
@@ -4820,9 +4820,9 @@
           <attvalue for="eigencentrality" value="0.0"></attvalue>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
-        <viz:size value="20.0"></viz:size>
+        <viz:size value="40.0"></viz:size>
         <viz:position x="5604.3843" y="2713.4622"></viz:position>
-        <viz:color r="90" g="50" b="172"></viz:color>
+        <viz:color r="255" g="0" b="0"></viz:color>
       </node>
       <node id="Freese  Anina" label="Freese  Anina">
         <attvalues>
@@ -9960,9 +9960,9 @@
           <attvalue for="eigencentrality" value="0.0"></attvalue>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
-        <viz:size value="20.0"></viz:size>
+        <viz:size value="40.0"></viz:size>
         <viz:position x="5176.042" y="2726.605"></viz:position>
-        <viz:color r="90" g="50" b="172"></viz:color>
+        <viz:color r="255" g="0" b="0"></viz:color>
       </node>
       <node id="Marra  Valeria" label="Marra  Valeria">
         <attvalues>
@@ -14640,9 +14640,9 @@
           <attvalue for="eigencentrality" value="0.0"></attvalue>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
-        <viz:size value="20.0"></viz:size>
+        <viz:size value="40.0"></viz:size>
         <viz:position x="5086.7686" y="2791.6646"></viz:position>
-        <viz:color r="90" g="50" b="172"></viz:color>
+        <viz:color r="255" g="0" b="0"></viz:color>
       </node>
       <node id="Trujillo  Eva-Maria" label="Trujillo  Eva-Maria">
         <attvalues>
